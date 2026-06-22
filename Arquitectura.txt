@@ -1,0 +1,5 @@
+API -> Aplicación -> Dominio
+Infraestructura |
+
+Infra AppHost -> API
+metrics API -> ServiceDefaults

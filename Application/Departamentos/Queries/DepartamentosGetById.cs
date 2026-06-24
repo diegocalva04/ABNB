@@ -16,15 +16,15 @@ public class DepartamentoGetById : IDepartamentoGetById
         _repositoryDepartamento = repositoryDepartamento;
     }
 
-public async Task<DepartamentoGetByIdDto?> Execute(int id)
-{
-    var departamento = await _repositoryDepartamento.GetByIdAsync(id);
-    if (departamento == null)
+    public async Task<DepartamentoGetByIdDto?> Execute(int id)
     {
-        return null;
+        var departamento = await _repositoryDepartamento.GetByIdAsync(id);
+        if (departamento == null)
+        {
+            return null;
+        }
+        return new DepartamentoGetByIdDto(departamento.Id, departamento.Nombre.Value);
     }
-    return new DepartamentoGetByIdDto(departamento.Id, departamento.Nombre);
-}
 }
 
 public record DepartamentoGetByIdDto(int Id, string Nombre);

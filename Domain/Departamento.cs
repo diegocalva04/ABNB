@@ -1,11 +1,29 @@
-﻿namespace Domain;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Comunes;
 
-public class Departamento
+namespace Domain;
+
+public class Departamento : Entidad
 {
-    public int Id { get; set; }
-    public string Nombre { get; set; } = string.Empty;
+    public Nombre Nombre { get; set; } = new Nombre(string.Empty);
+
+    //public Dinero Precio { get; set; } = new Dinero(0, Moneda.USD);
 }
 
+public record Nombre(string Value);
+
+public record Dinero(decimal Value, Moneda Moneda);
+
+public record Moneda
+{
+    public static Moneda USD { get; } = new Moneda("USD");
+    public static Moneda EUR { get; } = new Moneda("EUR");
+    public string Codigo { get; private init; }
+    private Moneda(string codigo)
+   {
+       Codigo = codigo;
+   }
+}
 public interface IDepartamentoRepository
 {
     Task<Departamento> GetByIdAsync(int id);
@@ -14,4 +32,3 @@ public interface IDepartamentoRepository
     Task UpdateAsync(Departamento departamento);
     Task DeleteAsync(int id);
 }
-

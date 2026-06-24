@@ -1,5 +1,7 @@
 using Domain;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+
 namespace Infraestructure.Data.Repository;
 
 public class DepartamentoRepository : IDepartamentoRepository
@@ -10,6 +12,7 @@ public class DepartamentoRepository : IDepartamentoRepository
     {
         _context = context;
     }
+
     public async Task AddAsync(Departamento departamento)
     {
         await _context.Departamentos.AddAsync(departamento);
@@ -18,14 +21,13 @@ public class DepartamentoRepository : IDepartamentoRepository
 
     public async Task DeleteAsync(int id)
     {
-    var departamento = await _context.Departamentos.FindAsync(id);
-    if (departamento != null)
-    {
-        _context.Departamentos.Remove(departamento);
-        await _context.SaveChangesAsync();
+        var departamento = await _context.Departamentos.FindAsync(id);
+        if (departamento != null)
+        {
+            _context.Departamentos.Remove(departamento);
+            await _context.SaveChangesAsync();
+        }
     }
-    }
-
 
     public async Task<List<Departamento>> GetAllAsync()
     {

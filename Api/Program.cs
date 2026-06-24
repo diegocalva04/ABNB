@@ -1,12 +1,13 @@
 using Application.Departamentos.Queries;
+using Domain;
 using Infraestructure;
-using Infraestructure.Data;
-using Microsoft.AspNetCore.Mvc;
+using Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddInfraestructure();
 builder.Services.AddScoped<IDepartamentoGetAll, DepartamentoGetAll>();
@@ -23,14 +24,14 @@ if (app.Environment.IsDevelopment())
     dbContext.Database.EnsureDeleted();
     dbContext.Database.EnsureCreated();
     if (!dbContext.Departamentos.Any())
-{
-    dbContext.Departamentos.AddRange(
-        new Domain.Departamento { Nombre = "Departamento 1" },
-        new Domain.Departamento { Nombre = "Departamento 2" },
-        new Domain.Departamento { Nombre = "Departamento 3" }
-    );
-    dbContext.SaveChanges();
-}
+    {
+        dbContext.Departamentos.AddRange(
+            new Domain.Departamento { Nombre = new Nombre("Departamento 1") },
+            new Domain.Departamento { Nombre = new Nombre("Departamento 2") },
+            new Domain.Departamento { Nombre = new Nombre("Departamento 3") }
+        );
+        dbContext.SaveChanges();
+    }
 }
 
 app.MapGet(
@@ -46,15 +47,15 @@ app.MapGet(
     }
 );
 
-
 app.MapGet(
-    "/departamentos", 
-    async (IDepartamentoGetAll departamentoGetAll) =>
-{
-    var result = await departamentoGetAll.Execute();
-    return Results.Ok(result);
-})
-.WithName("GetDepartamentos");
+        "/departamentos",
+        async (IDepartamentoGetAll departamentoGetAll) =>
+        {
+            var result = await departamentoGetAll.Execute();
+            return Results.Ok(result);
+        }
+    )
+    .WithName("GetDepartamentos");
 
 app.UseHttpsRedirection();
 
